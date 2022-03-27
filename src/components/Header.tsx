@@ -15,7 +15,6 @@ import "stylesheets/AnimatedTheme.scss";
 import OptionsModal from "./OptionsModal";
 import TextModal from "./TextModal";
 import TimeModal from "./TimeModal";
-import { time } from "console";
 
 export interface Options {
 	time: number[];
@@ -42,7 +41,17 @@ export const options: Options = {
 		"rose-milk",
 		"us-light"
 	],*/
-	type: ["001_words", "002_sentences", "003_text", "004_text", "005_text", "006_text", "007_text", "008_text", "009_text"],
+	type: [
+		"001_words",
+		"002_sentences",
+		"003_text",
+		"004_text",
+		"005_text",
+		"006_text",
+		"007_text",
+		"008_text",
+		"009_text",
+	],
 };
 
 type MyProps = {
@@ -97,13 +106,13 @@ export default function Header() {
 	// Set Time
 	useEffect(() => {
 		if (timeLimit !== 0) {
-			document.querySelector(".time")?.childNodes.forEach((el) => {
+			/*document.querySelector(".time")?.childNodes.forEach((el) => {
 				if (el instanceof HTMLButtonElement)
 					el.classList.remove("selected");
 			});
 			document
 				.querySelector(`button[value="${timeLimit}"]`)
-				?.classList.add("selected");
+				?.classList.add("selected");*/
 			dispatch(setTime(timeLimit));
 			localStorage.setItem("time", `${timeLimit}`);
 			resetTest();
@@ -145,7 +154,7 @@ export default function Header() {
 	const openTextModal = ({ target, clientX, clientY }: React.MouseEvent) => {
 		setShowTextModal((s) => true);
 	};
-	const openTimeModal = ({ target, clientX, clientY }: React.MouseEvent) => {
+	const openTimeModal = () => {
 		setShowTimeModal((s) => true);
 	};
 
@@ -195,6 +204,17 @@ export default function Header() {
 			<path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
 		</svg>
 	);
+
+	const TimeIcon = () => (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			fill="currentColor"
+			viewBox="0 0 16 16">
+			<path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5zm2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.035 8.035 0 0 0 .86 5.387zM11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.035 8.035 0 0 0-3.527-3.527z" />
+		</svg>
+	);
 	return (
 		//<header className={timerId ? "hidden" : undefined}>
 		<>
@@ -223,15 +243,15 @@ export default function Header() {
 							</button>
 						))}
 						|
+						<span className="mini selected" data-option={"time"}>
+							{timeLimit}
+						</span>
 						<button
 							className="mini"
-							key={""}
 							data-option={"time"}
-							value={""}
-							onClick={(e) => openTimeModal(e)}>
-							{""} <GearIcon />
+							onClick={(e) => openTimeModal()}>
+							<TimeIcon />
 						</button>
-						
 					</div>
 
 					<div className="theme">

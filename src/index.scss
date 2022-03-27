@@ -74,6 +74,11 @@ button {
 	}
 }
 
+span{
+	&.selected{
+		color: var(--hl-color);
+	}
+}
 a {
 	color: var(--font-color);
 	text-decoration: none;
