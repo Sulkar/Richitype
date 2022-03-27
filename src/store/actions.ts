@@ -12,9 +12,9 @@ export const SET_THEME = "SETTHEME";
 export const SET_TIME = "SETTIME";
 export const SET_REF = "SETREF";
 export const SET_CARET_REF = "SETCARETREF";
-export const SET_TYPE = "SETTYPE";
 export const SET_CURRENT_TEXT ="SETCURRENTTEXT";
 export const SET_LAST_WORD = "SETLASTWORD";
+export const SET_USER = "SETUSER";
 
 // Time Actions
 export const timerDecrement = () => ({ type: TIMER_DECREMENT });
@@ -51,15 +51,16 @@ export const setCaretRef = (payload: RefObject<HTMLSpanElement>) => ({
 // Prefrences Actions
 export const setTheme = (payload: string) => ({ type: SET_THEME, payload });
 export const setTime = (payload: number) => ({ type: SET_TIME, payload });
-export const setType = (payload: string) => ({
-	type: SET_TYPE,
-	payload,
-});
+
 export const setCurrentText = (payload: string) => ({
 	type: SET_CURRENT_TEXT,
 	payload,
 });
 export const setLastWord = (payload: boolean) => ({
 	type: SET_LAST_WORD,
+	payload,
+});
+export const setUser = (payload: string) => ({
+	type: SET_USER,
 	payload,
 });

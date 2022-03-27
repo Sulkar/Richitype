@@ -5,7 +5,7 @@ export const resetTest = async () => {
 	const { dispatch, getState } = store;
 	const {
 		time: { timerId },
-		preferences: { timeLimit, type, lastWord },
+		preferences: { timeLimit, lastWord, currentText },
 
 	} = getState();
 	document
@@ -16,7 +16,7 @@ export const resetTest = async () => {
 		clearInterval(timerId);
 		dispatch(setTimerId(null));
 	}
-	import(`wordlists/${type}.json`).then((words) =>
+	import(`wordlists/${currentText}.json`).then((words) =>
 		dispatch(setWordList(words.default))
 	);
 	dispatch(timerSet(timeLimit));

@@ -1,15 +1,26 @@
-.us-light{
+.light{
 	/* colors */
-	--bg-color: #323437;
-	--font-color: #d1d0c5; 
-	--hl-color: orange;
-	--fg-color: #292f34;
-	--word-wrong-color: #ca4754;
-	--word-color: #646669;
-	--word-right-color: #d1d0c5;
-	--caret-color: #d1d0c5;
-}
+	--word-wrong-color: #ca4754 !important;
+	--word-color: #646669 !important;
+	--word-right-color: #d1d0c5 !important;
+	--caret-color: #d1d0c5 !important;
 
+	--bg-color: #ffffff !important;
+	--font-color: #111111 !important;
+	--hl-color: orange !important;
+	--fg-color: #292f34 !important;
+}
+.dark {
+	/* colors */
+	--bg-color: #323437 !important;
+	--font-color: #d1d0c5 !important; 
+	--hl-color: orange !important;
+	--fg-color: #292f34 !important;
+	--word-wrong-color: #ca4754 !important;
+	--word-color: #646669 !important;
+	--word-right-color: #d1d0c5 !important;
+	--caret-color: #d1d0c5 ;
+}
 .mkbhd {
 	--bg-color: #171717 !important;
 	--font-color: #ededed !important;

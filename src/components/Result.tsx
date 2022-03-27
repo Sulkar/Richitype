@@ -8,7 +8,7 @@ export default function Result() {
 	const {
 		word: { wordList, typedHistory, currWord },
 		time: { timer },
-		preferences: { timeLimit },
+		preferences: { timeLimit, user},
 	} = useSelector((state: State) => state);
 	const spaces = wordList.indexOf(currWord);
 	let correctChars = 0;

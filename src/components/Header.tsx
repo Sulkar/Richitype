@@ -4,22 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	setTheme,
 	setTime,
-	setType,
 	setWordList,
 	timerSet,
 	setCurrentText,
+	setUser,
 } from "store/actions";
 import { State } from "store/reducer";
 import "stylesheets/Header.scss";
 import "stylesheets/AnimatedTheme.scss";
-import OptionsModal from "./OptionsModal";
 import TextModal from "./TextModal";
 import TimeModal from "./TimeModal";
+import UserModal from "./UserModal";
 
 export interface Options {
 	time: number[];
-	/*theme: string[];*/
-	type: string[];
+	theme: string[];
+	currentText: string[];
 }
 
 interface AnimationProps {
@@ -30,18 +30,8 @@ interface AnimationProps {
 
 export const options: Options = {
 	time: [5, 15, 30, 45, 60, 120],
-	/*theme: [
-		"default",
-		"mkbhd",
-		"mocha",
-		"coral",
-		"ocean",
-		"azure",
-		"forest",
-		"rose-milk",
-		"us-light"
-	],*/
-	type: [
+	theme: ["dark", "light"],
+	currentText: [
 		"001_words",
 		"002_sentences",
 		"003_text",
@@ -59,12 +49,12 @@ type MyProps = {
 };
 
 export default function Header() {
-	const [showModal, setShowModal] = useState(false);
 	const [showTimeModal, setShowTimeModal] = useState(false);
+	const [showUserModal, setShowUserModal] = useState(false);
 	const [showTextModal, setShowTextModal] = useState(false);
 
 	const {
-		preferences: { timeLimit, theme, type, currentText },
+		preferences: { timeLimit, theme, currentText, user },
 		time: { timerId },
 	} = useSelector((state: State) => state);
 	const [animationProps, setAnimationProps] =
@@ -72,17 +62,17 @@ export default function Header() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const theme = localStorage.getItem("theme") || "default";
-		const type = localStorage.getItem("type") || "words";
-		const currentText = localStorage.getItem("currentText") || "words";
+		const theme = localStorage.getItem("theme") || "dark";
+		const currentText = localStorage.getItem("currentText") || "001_words";
+		const user = localStorage.getItem("user") || "";
 		const time = parseInt(localStorage.getItem("time") || "60", 10);
-		import(`wordlists/${type}.json`).then((words) =>
+		import(`wordlists/${currentText}.json`).then((words) =>
 			dispatch(setWordList(words.default))
 		);
 		dispatch(setCurrentText(currentText));
-
+		dispatch(setUser(user));
 		dispatch(timerSet(time));
-		dispatch(setType(type));
+
 		dispatch(setTime(time));
 		dispatch(setTheme(theme));
 	}, [dispatch]);
@@ -97,8 +87,8 @@ export default function Header() {
 			document
 				.querySelector(`button[value="${theme}"]`)
 				?.classList.add("selected");
-			//document.body.children[1].classList.remove(...options.theme);
-			document.body.children[1].classList.add(theme);
+			document.body.className = theme;
+			//document.body.classList.add(theme);
 			localStorage.setItem("theme", theme);
 		}
 	}, [dispatch, theme]);
@@ -106,34 +96,11 @@ export default function Header() {
 	// Set Time
 	useEffect(() => {
 		if (timeLimit !== 0) {
-			/*document.querySelector(".time")?.childNodes.forEach((el) => {
-				if (el instanceof HTMLButtonElement)
-					el.classList.remove("selected");
-			});
-			document
-				.querySelector(`button[value="${timeLimit}"]`)
-				?.classList.add("selected");*/
 			dispatch(setTime(timeLimit));
 			localStorage.setItem("time", `${timeLimit}`);
 			resetTest();
 		}
 	}, [dispatch, timeLimit]);
-
-	// Set Type
-	useEffect(() => {
-		if (type !== "") {
-			document.querySelector(".type")?.childNodes.forEach((el) => {
-				if (el instanceof HTMLButtonElement)
-					el.classList.remove("selected");
-			});
-			document
-				.querySelector(`button[value="${type}"]`)
-				?.classList.add("selected");
-			dispatch(setType(type));
-			localStorage.setItem("type", type);
-			resetTest();
-		}
-	}, [dispatch, type]);
 
 	// Set CurrentText
 	useEffect(() => {
@@ -144,51 +111,50 @@ export default function Header() {
 		}
 	}, [dispatch, currentText]);
 
-	const openOptionsModal = ({
-		target,
-		clientX,
-		clientY,
-	}: React.MouseEvent) => {
-		setShowModal((s) => true);
-	};
-	const openTextModal = ({ target, clientX, clientY }: React.MouseEvent) => {
+	// Set user
+	useEffect(() => {
+		if (user !== "") {
+			dispatch(setUser(user));
+			localStorage.setItem("user", user);
+			resetTest();
+		}
+	}, [dispatch, user]);
+
+	const openTextModal = () => {
 		setShowTextModal((s) => true);
 	};
 	const openTimeModal = () => {
 		setShowTimeModal((s) => true);
 	};
+	const openUserModal = () => {
+		setShowUserModal((s) => true);
+	};
+
+	const switchTheme = (theme: string) => {
+		setTimeout(() => {
+			dispatch(setTheme(theme));
+		}, 750);
+		setAnimationProps({
+			top: 0,
+			left: 0,
+			theme: theme,
+		});
+	};
 
 	const handleOptions = ({ target, clientX, clientY }: React.MouseEvent) => {
 		if (target instanceof HTMLButtonElement && target.dataset.option) {
-			//setShowModal((s) => !s);
 			if (target.value === theme || +target.value === timeLimit) {
 				target.blur();
 				return;
 			}
-			switch (target.dataset.option) {
-				case "theme":
-					setTimeout(() => {
-						dispatch(setTheme(target.value));
-					}, 750);
-					setAnimationProps({
-						top: clientY,
-						left: clientX,
-						theme: target.value,
-					});
-					break;
-				case "time":
-					dispatch(setTime(+target.value));
-					break;
-				case "type":
-					dispatch(setType(target.value));
-					break;
-			}
+
+			dispatch(setTime(+target.value));
 			target.blur();
 		}
 	};
 
-	const Icon = ({ fill }: MyProps) => (
-		<svg viewBox="0 0 640 512" fill={fill}>
+	const Icon = () => (
+		<svg viewBox="0 0 640 512" fill="currentColor">
 			<path d="M0 224v272c0 8.84 7.16 16 16 16h80V192H32c-17.67 0-32 14.33-32 32zm360-48h-24v-40c0-4.42-3.58-8-8-8h-16c-4.42 0-8 3.58-8 8v64c0 4.42 3.58 8 8 8h48c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8zm137.75-63.96l-160-106.67a32.02 32.02 0 0 0-35.5 0l-160 106.67A32.002 32.002 0 0 0 128 138.66V512h128V368c0-8.84 7.16-16 16-16h96c8.84 0 16 7.16 16 16v144h128V138.67c0-10.7-5.35-20.7-14.25-26.63zM320 256c-44.18 0-80-35.82-80-80s35.82-80 80-80 80 35.82 80 80-35.82 80-80 80zm288-64h-64v320h80c8.84 0 16-7.16 16-16V224c0-17.67-14.33-32-32-32z"></path>
 		</svg>
 	);
@@ -215,21 +181,61 @@ export default function Header() {
 			<path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5zm2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.035 8.035 0 0 0 .86 5.387zM11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.035 8.035 0 0 0-3.527-3.527z" />
 		</svg>
 	);
+
+	const UserIcon = () => (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			fill="currentColor"
+			viewBox="0 0 16 16">
+			<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+		</svg>
+	);
+
+	const LightIcon = () => (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			fill="currentColor"
+			viewBox="0 0 16 16">
+			<path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+		</svg>
+	);
+
+	const DarkIcon = () => (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			fill="currentColor"
+			viewBox="0 0 16 16">
+			<path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+		</svg>
+	);
+
 	return (
 		//<header className={timerId ? "hidden" : undefined}>
 		<>
 			<header className="">
 				<a href="." className="logo">
 					<div className="icon">
-						{theme === "default" ? (
-							<Icon fill="#d1d0c5" />
-						) : (
-							<Icon fill="tomato" />
-						)}
+						<Icon />
 					</div>
 					<div className="text">typer</div>
 				</a>
 				<div className="buttons">
+					<div className="user">
+						Name:
+						<span className="mini"> {user}</span>
+						<button
+							className="mini"
+							data-option={"user"}
+							onClick={() => openUserModal()}>
+							<UserIcon />
+						</button>
+					</div>
 					<div className="time">
 						Zeit:
 						{options.time.map((seconds: number) => (
@@ -249,7 +255,7 @@ export default function Header() {
 						<button
 							className="mini"
 							data-option={"time"}
-							onClick={(e) => openTimeModal()}>
+							onClick={() => openTimeModal()}>
 							<TimeIcon />
 						</button>
 					</div>
@@ -257,15 +263,17 @@ export default function Header() {
 					<div className="theme">
 						<button
 							className="mini"
-							onClick={(e) => openOptionsModal(e)}>
-							theme
+							onClick={() =>
+								switchTheme(theme === "dark" ? "light" : "dark")
+							}>
+							{theme === "dark" ? <LightIcon /> : <DarkIcon />}
 						</button>
 					</div>
 					<div className="type">
 						Text:
 						<button
 							className="mini"
-							onClick={(e) => openTextModal(e)}>
+							onClick={(e) => openTextModal()}>
 							{currentText}
 						</button>
 					</div>
@@ -280,9 +288,9 @@ export default function Header() {
 						onAnimationEnd={() => setAnimationProps(null)}></div>
 				) : null}
 			</header>
-			{showModal && <OptionsModal setShowModal={setShowModal} />}
 			{showTextModal && <TextModal setShowTextModal={setShowTextModal} />}
 			{showTimeModal && <TimeModal setShowTimeModal={setShowTimeModal} />}
+			{showUserModal && <UserModal setShowUserModal={setShowUserModal} />}
 		</>
 	);
 }

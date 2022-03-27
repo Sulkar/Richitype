@@ -13,9 +13,9 @@ import {
 	SET_TIME,
 	SET_REF,
 	SET_CARET_REF,
-	SET_TYPE,
 	SET_CURRENT_TEXT,
 	SET_LAST_WORD,
+	SET_USER,
 } from "./actions";
 
 export interface State {
@@ -25,6 +25,7 @@ export interface State {
 		type: string;
 		currentText: string;
 		lastWord: boolean;
+		user: string;
 	};
 	word: {
 		currWord: string;
@@ -47,6 +48,7 @@ export const initialState: State = {
 		type: "",
 		currentText: "",
 		lastWord: false,
+		user: "",
 	},
 	word: {
 		currWord: "",
@@ -131,13 +133,12 @@ const wordReducer = (
 				shuffledWordList = payload.flatMap((token: string) =>
 					token.split(" ")
 				);
-				
+
 			return {
 				...state,
 				typedWord: "",
 				typedHistory: [],
-				
-				
+
 				currWord: shuffledWordList[0],
 				wordList: shuffledWordList,
 			};
@@ -158,11 +159,7 @@ const preferenceReducer = (
 				...state,
 				timeLimit: payload,
 			};
-		case SET_TYPE:
-			return {
-				...state,
-				type: payload,
-			};
+
 		case SET_CURRENT_TEXT:
 			return {
 				...state,
@@ -172,6 +169,11 @@ const preferenceReducer = (
 			return {
 				...state,
 				lastWord: payload,
+			};
+		case SET_USER:
+			return {
+				...state,
+				user: payload,
 			};
 		default:
 			return state;

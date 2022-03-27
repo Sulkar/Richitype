@@ -3,7 +3,7 @@ import { KeyboardEvent, useEffect, useState, useRef } from "react";
 import styles from "stylesheets/CommandPallet.module.scss";
 import { options, Options } from "./Header";
 import { useDispatch } from "react-redux";
-import { setTime, setTheme, setType, setCurrentText } from "store/actions";
+import { setTime, setTheme, setCurrentText } from "store/actions";
 
 interface Props {
 	setShowTextModal: Function;
@@ -18,7 +18,7 @@ export default function TextModal(props: Props) {
 	const palletTextBox = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		setSelectedOption("type");
+		setSelectedOption("currentText");
 		if (!selectedOption) {
 			setCommandList(
 				Object.keys(options).filter((option) =>
@@ -54,8 +54,7 @@ export default function TextModal(props: Props) {
 				dispatch(setTheme(command));
 				props.setShowTextModal(false);
 				break;
-			case "type":
-				dispatch(setType(command));
+			case "currentText":
 				dispatch(setCurrentText(command));
 				props.setShowTextModal(false);
 				break;

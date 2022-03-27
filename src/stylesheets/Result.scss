@@ -2,10 +2,11 @@ table {
 	font-size: 16pt;
 	font-weight: 800;
 	button {
-		font-size: 21pt;
+		margin-top: 30px;
+		font-size: 16pt;
 	}
 }
 
 .wrong {
-	color: var(--hl-color);
+	color: var(--word-wrong-color);
 }

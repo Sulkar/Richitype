@@ -30,7 +30,8 @@
 .commandInput {
 	padding: 10px;
 	background-color: inherit;
-	color: inherit;
+	color: var(--bg-color);
+	font-weight: bolder;
 	font-family: inherit;
 	font-size: 18px;
 	border: none;
