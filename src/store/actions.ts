@@ -48,6 +48,7 @@ export const setCaretRef = (payload: RefObject<HTMLSpanElement>) => ({
 	payload,
 });
 
+
 // Prefrences Actions
 export const setTheme = (payload: string) => ({ type: SET_THEME, payload });
 export const setTime = (payload: number) => ({ type: SET_TIME, payload });

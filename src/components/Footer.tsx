@@ -43,7 +43,7 @@ export default function Footer() {
 	}, []);
 
 	return (
-		<div className={`bottom-area ${timerId ? "hidden" : ""}`}>
+		<div className={`bottom-area ${timerId ? "hidden" : ""} hide-in-print`}>
 			
 			
 			<footer>

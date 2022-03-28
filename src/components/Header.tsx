@@ -220,23 +220,23 @@ export default function Header() {
 		<>
 			<header className="">
 				<a href="." className="logo">
-					<div className="icon">
+					<div className="icon color-print">
 						<Icon />
 					</div>
-					<div className="text">typer</div>
+					<div className="text color-print">typer</div>
 				</a>
 				<div className="buttons">
-					<div className="user">
+					<div className="user color-print">
 						Name:
-						<span className="mini"> {user}</span>
+						<span className="mini color-print"> {user}</span>
 						<button
-							className="mini"
+							className="mini color-print"
 							data-option={"user"}
 							onClick={() => openUserModal()}>
 							<UserIcon />
 						</button>
 					</div>
-					<div className="time">
+					<div className="time hide-in-print">
 						Zeit:
 						{options.time.map((seconds: number) => (
 							<button
@@ -260,7 +260,7 @@ export default function Header() {
 						</button>
 					</div>
 
-					<div className="theme">
+					<div className="theme hide-in-print">
 						<button
 							className="mini"
 							onClick={() =>
@@ -269,10 +269,10 @@ export default function Header() {
 							{theme === "dark" ? <LightIcon /> : <DarkIcon />}
 						</button>
 					</div>
-					<div className="type">
+					<div className="type color-print">
 						Text:
 						<button
-							className="mini"
+							className="mini color-print"
 							onClick={(e) => openTextModal()}>
 							{currentText}
 						</button>

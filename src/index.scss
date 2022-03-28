@@ -1,8 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100&display=swap");
+
+@media print {
+	#root {
+		display: block !important;
+	}
+	.hide-in-print {
+		display: none !important;
+	}
+	.color-print {
+		color: black !important;
+	}
+	.box {
+		font-size: 1rem; /* 1.5rem */
+	}
+	.right {
+		color: black !important;
+	}
+	.word {
+		color: lightgray !important;
+	}
+	#caret {				
+		display: none;
+	}
+	table {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
 
 body {
 	margin: 0;
-	font-family: 'Roboto Mono', monospace;
+	font-family: "Roboto Mono", monospace;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -24,30 +52,27 @@ body {
 	background-color: var(--bg-color);
 }
 
-
 #root {
-	
 	display: flex;
 	height: 100%;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
 	color: var(--font-color);
-	
 }
 
-.logo{
+.logo {
 	align-items: center;
 	display: grid;
-    gap: 0.5rem;
-    user-select: none;
+	gap: 0.5rem;
+	user-select: none;
 	grid-template-columns: auto 1fr auto;
 }
-.icon{
+.icon {
 	display: grid;
 	width: 40px;
 }
-.text{
+.text {
 	font-size: 2rem;
 }
 button {
@@ -55,7 +80,7 @@ button {
 	color: var(--font-color);
 	border: 2px solid var(--font-color);
 	padding: 10px;
-	font-family: 'Roboto Mono', monospace;
+	font-family: "Roboto Mono", monospace;
 	font-weight: 700;
 	margin: 10px;
 	cursor: pointer;
@@ -74,8 +99,8 @@ button {
 	}
 }
 
-span{
-	&.selected{
+span {
+	&.selected {
 		color: var(--hl-color);
 	}
 }

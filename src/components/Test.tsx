@@ -10,7 +10,9 @@ export default function Test() {
 		time: { timer },
 	} = useSelector((state: State) => state);
 	const dispatch = useDispatch();
-	const extraLetters = typedWord.slice(currWord !== undefined ? currWord.length : 0).split("");
+	const extraLetters = typedWord
+		.slice(currWord !== undefined ? currWord.length : 0)
+		.split("");
 	const activeWord = useRef<HTMLDivElement>(null);
 	const caretRef = useRef<HTMLSpanElement>(null);
 
@@ -21,9 +23,8 @@ export default function Test() {
 
 	return (
 		<div className="test">
-			
-			<div className="timer">{timer}</div>
-			<div className="box boxPartial">
+			<div className="timer hide-in-print">{timer}</div>
+			<div className="box boxPartial" id="boxNormal">
 				{wordList.map((word, idx) => {
 					const isActive =
 						currWord +
@@ -40,7 +41,7 @@ export default function Test() {
 									id="caret"
 									className="blink"
 									style={{
-										left: typedWord.length * 14.5833,
+										left: typedWord.length * 14.5833,										
 									}}>
 									|
 								</span>

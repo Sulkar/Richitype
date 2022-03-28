@@ -1,14 +1,13 @@
 import { resetTest } from "helpers/resetTest";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { State } from "store/reducer";
 import "stylesheets/Result.scss";
 
 export default function Result() {
-	
 	const {
-		word: { wordList, typedHistory, currWord },
+		word: { wordList, typedHistory, currWord, typedWord },
 		time: { timer },
-		preferences: { timeLimit, user},
+		preferences: { timeLimit, user },
 	} = useSelector((state: State) => state);
 	const spaces = wordList.indexOf(currWord);
 	let correctChars = 0;
@@ -19,10 +18,15 @@ export default function Result() {
 		if (r) correctChars += wordList[idx].length;
 	});
 	const wpm = ((correctChars + spaces) * 60) / timeLimit / 5;
+
+	const printResult = () => {
+		window.print();
+	};
+
 	return (
 		<div className="result">
 			<table>
-				<tbody>
+				<tbody className="color-print">
 					<tr>
 						<td colSpan={2} align="center">
 							<h1>{Math.round(wpm) + " wpm"}</h1>
@@ -44,15 +48,27 @@ export default function Result() {
 						<th>falsche Wörter:</th>
 						<td>{result.filter((x) => !x).length}</td>
 					</tr>
-					<tr>
+
+					<tr className="hide-in-print">
 						<td colSpan={2} align="center">
-							<button onClick={() => resetTest()}>Neu starten</button>
+							<button onClick={() => resetTest()}>
+								Neu starten
+							</button>
+						</td>
+					</tr>
+
+					<tr className="hide-in-print">
+						<td colSpan={2} align="center">
+							<a
+								className="printResult"
+								href="#"
+								onClick={() => printResult()}>
+								drucken
+							</a>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<div>
-			</div>
 		</div>
 	);
 }

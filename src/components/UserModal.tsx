@@ -36,7 +36,7 @@ export default function TimeModal(props: Props) {
 					ref={palletTextBox}
 					type="text"
 					className={styles.commandInput}
-					placeholder="Name eingeben"
+					placeholder="Name eingeben."
 					autoFocus
 					onChange={(evt) => updateNewUser(evt.target.value)}
 					onClick={(e) => {

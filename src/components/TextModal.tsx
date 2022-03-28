@@ -59,7 +59,7 @@ export default function TextModal(props: Props) {
 				props.setShowTextModal(false);
 				break;
 			default:
-				console.log(selectedOption, command);
+				//console.log(selectedOption, command);
 		}
 	};
 

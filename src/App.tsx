@@ -51,7 +51,6 @@ export default function App() {
 	useEffect(() => {
 		let idx = typedWord.length;
 		const currWordEl = activeWordRef?.current!;
-		console.log("remove wrong right " + currWord)
 		
 		if (currWordEl && idx < currWord.length)
 			currWordEl.children[idx + 1].classList.remove("wrong", "right");		
@@ -61,13 +60,11 @@ export default function App() {
 	useEffect(() => {
 				
 		if (currWord === undefined && timerId){
-			console.log("lastWord")
 			dispatch(setLastWord(true));
 			clearInterval(timerId);
 			dispatch(setTimerId(null));
-			document.getElementsByClassName("box")[0].classList.remove("boxPartial");
+			document.getElementById("boxNormal")?.classList.remove("boxPartial");
 		}else{
-			console.log("not last word")
 		}
 		
 	}, [currWord]);
@@ -77,7 +74,7 @@ export default function App() {
 			
 			clearInterval(timerId);
 			dispatch(setTimerId(null));
-			document.getElementsByClassName("box")[0].classList.remove("boxPartial");
+			document.getElementById("boxNormal")?.classList.remove("boxPartial");
 		}
 	}, [dispatch, timer, timerId]);
 
