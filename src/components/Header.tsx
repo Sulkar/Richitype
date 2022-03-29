@@ -32,15 +32,14 @@ export const options: Options = {
 	time: [5, 15, 30, 45, 60, 120],
 	theme: ["dark", "light"],
 	currentText: [
-		"001_words",
-		"002_sentences",
-		"003_text",
-		"004_text",
-		"005_text",
-		"006_text",
-		"007_text",
-		"008_text",
-		"009_text",
+		"001_Wörter",
+		"002_fj",
+		"003_urk",
+		"004_dk",
+		"005_Sätze_Englisch",
+		"006_Der_Braunbär",
+		"007_Lachen",
+		"008_test",
 	],
 };
 
@@ -63,11 +62,11 @@ export default function Header() {
 
 	useEffect(() => {
 		const theme = localStorage.getItem("theme") || "dark";
-		const currentText = localStorage.getItem("currentText") || "001_words";
+		const currentText = localStorage.getItem("currentText") || "001_Wörter";
 		const user = localStorage.getItem("user") || "";
 		const time = parseInt(localStorage.getItem("time") || "60", 10);
 		import(`wordlists/${currentText}.json`).then((words) =>
-			dispatch(setWordList(words.default))
+			dispatch(setWordList(words))
 		);
 		dispatch(setCurrentText(currentText));
 		dispatch(setUser(user));

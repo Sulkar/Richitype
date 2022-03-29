@@ -123,22 +123,18 @@ const wordReducer = (
 				caretRef: payload,
 			};
 		case SET_WORDLIST:
-			const areNotWords = payload.every((word: string) =>
-				word.includes(" ")
-			);
-			var shuffledWordList: string[] = payload.sort(
+			const myArray: string[] = Array.from(payload);
+
+			var shuffledWordList: string[] = myArray.sort(
 				() => Math.random() - 0.5
 			);
-			if (areNotWords)
-				shuffledWordList = payload.flatMap((token: string) =>
-					token.split(" ")
-				);
-
+			shuffledWordList = myArray.flatMap((token: string) =>
+				token.split(" ")
+			);
 			return {
 				...state,
 				typedWord: "",
 				typedHistory: [],
-
 				currWord: shuffledWordList[0],
 				wordList: shuffledWordList,
 			};
