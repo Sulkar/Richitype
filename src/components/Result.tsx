@@ -9,8 +9,10 @@ export default function Result() {
 		time: { timer },
 		preferences: { timeLimit },
 	} = useSelector((state: State) => state);
-	const spaces = wordList.indexOf(currWord); //currWort = aktuelles Wort, der Index davon gibt an, wieviele Leerzeichen man schon hat.
-
+	
+	//Leerzeichen: currWort = aktuelles Wort, der Index davon gibt an, wieviele Leerzeichen man schon hat. Fehler, wenn ein Wort mehrmals vorkommt. wordList.indexOf(currWord);
+	let spaces = (typedHistory.length-1); // ['Hello', 'myy', 'Hello'] length = 3 - 1 = 2 -> zwei Leerzeichen wurden geschrieben!
+	
 	// typedHistory = Array mit den geschriebenen Wörtern z.B.: ['steht', 'pfdegt', 'Hexe'], auch falsche Wörter werden hier aufgenommen
 	// currWord = String: aktuelles Wort z.B.: November
 	// typedWord = String: aktuelle Buchstaben des Worts z.B.: Nove
@@ -45,7 +47,11 @@ export default function Result() {
 	});
 	//aktuelles Wort wird nach Anschlägen ausgezählt
 	const typedwordLength = typedWord.length;
-	countAnschlaege(currWord.substring(0, typedwordLength), typedWord);
+	if(currWord !== undefined){
+		countAnschlaege(currWord.substring(0, typedwordLength), typedWord);
+		spaces++; //spaces werden um 1 erhöht, wenn der Nutzer gerade ein Wort schreibt, welches aber noch nicht fertig ist und somit nicht in den typedHistory Array ist.
+	}
+	
 	//richtig geschriebene Wörter werden gezählt
 	typedHistory.forEach((_typedWord, index) => {
 		countWoerter(wordList[index], _typedWord);

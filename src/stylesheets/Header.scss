@@ -40,3 +40,14 @@ footer {
 	overflow: scroll;
 	overflow-x: hidden;
 }
+.infoModalDiv {
+	width: 33rem;
+    padding: 5px;
+    background: var(--bg-color);
+    color: var(--font-color);
+	font-weight: bold;
+}
+.infoModalIcon{
+	width: 10rem;
+	margin:auto;
+}

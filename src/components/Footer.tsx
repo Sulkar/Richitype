@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { State } from "store/reducer";
 import "stylesheets/Footer.scss";
+import InfoModal from "./InfoModal";
 
 interface Contributor {
 	avatar_url: string;
@@ -29,6 +30,8 @@ export default function Footer() {
 	const [contributors, setContributors] = useState<Contributor[]>([]);
 	const { timerId } = useSelector((state: State) => state.time);
 	const [showList, setShowList] = useState<boolean>(false);
+	const [showInfoModal, setShowInfoModal] = useState(false);
+
 	useEffect(() => {
 		const URL =
 			"https://api.github.com/repos/salmannotkhan/typing-test/contributors";
@@ -42,19 +45,31 @@ export default function Footer() {
 			.then((filtered) => setContributors(filtered));
 	}, []);
 
+	const openInfoModal = () => {
+		setShowInfoModal((s) => true);
+	};
+	
 	return (
-		<div className={`bottom-area ${timerId ? "hidden" : ""} hide-in-print`}>
-			
-			
-			<footer>
-			<span className="hint">
-				<kbd>Tab</kbd> um neu zu starten.
-			</span>
-				<span>
-					Info
-				</span>
-				
-			</footer>
-		</div>
+		<>
+			<div
+				className={`bottom-area ${
+					timerId ? "hidden" : ""
+				} hide-in-print`}>
+				<footer>
+					<span className="hint">
+						<kbd>Tab</kbd> um neu zu starten.
+					</span>
+
+					<span>
+						<button
+							className="mini color-print"
+							onClick={(e) => openInfoModal()}>
+							{"Info"}
+						</button>
+					</span>
+				</footer>
+			</div>
+			{showInfoModal && <InfoModal setShowInfoModal={setShowInfoModal} />}
+		</>
 	);
 }
