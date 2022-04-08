@@ -39,7 +39,8 @@ export const options: Options = {
 		"005_Sätze_Englisch",
 		"006_Der_Braunbär",
 		"007_Lachen",
-		"008_test",
+		"008_Wiederholung_Level_1",
+		"009_test",
 	],
 };
 
