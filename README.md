@@ -2,6 +2,8 @@
 
 **Richitype** ist eine Weiterentwicklung von [**Typing Test** von salmannotkhan](https://github.com/salmannotkhan/typing-test)!
 
+![info](/info.png)
+
 ## Commands
 ```zsh
 npm install
