@@ -5,7 +5,7 @@ import Test from "components/Test";
 import Result from "components/Result";
 import Footer from "components/Footer";
 import { State } from "store/reducer";
-import { setCurrentText, setLastWord, setTimerId } from "store/actions";
+import { setLastWord, setTimerId } from "store/actions";
 import { recordTest } from "helpers/recordTest";
 import "stylesheets/themes.scss";
 
@@ -13,7 +13,7 @@ export default function App() {
 	const {
 		time: { timerId, timer },
 		word: { currWord, typedWord, activeWordRef },
-		preferences: {lastWord, currentText},
+		preferences: {lastWord},
 
 	} = useSelector((state: State) => state);
 	const dispatch = useDispatch();

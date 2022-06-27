@@ -1,5 +1,5 @@
 //console
-import { KeyboardEvent, useEffect, useState, useRef } from "react";
+import { KeyboardEvent, useRef } from "react";
 import styles from "stylesheets/CommandPallet.module.scss";
 import { useDispatch } from "react-redux";
 import { setTime } from "store/actions";
@@ -21,12 +21,12 @@ export default function TimeModal(props: Props) {
 		e.stopPropagation();
 	};
 
-	const updateNewTime = (currentValue:string)=>{
+	const updateNewTime = (currentValue: string) => {
 		const newTime = parseInt(currentValue);
-		if(!isNaN(newTime)){
+		if (!isNaN(newTime)) {
 			dispatch(setTime(+newTime));
-		}		
-	}
+		}
+	};
 
 	return (
 		<div
@@ -39,15 +39,13 @@ export default function TimeModal(props: Props) {
 					ref={palletTextBox}
 					type="text"
 					className={styles.commandInput}
-					placeholder="Zeit in Sekunden eingeben."					
+					placeholder="Zeit in Sekunden eingeben."
 					autoFocus
-					onChange={evt => updateNewTime(evt.target.value)}
+					onChange={(evt) => updateNewTime(evt.target.value)}
 					onClick={(e) => {
 						e.stopPropagation();
 					}}
 				/>
-
-				
 			</div>
 		</div>
 	);

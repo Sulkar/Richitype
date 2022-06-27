@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	setTheme,
 	setTime,
-	setWordList,
 	timerSet,
-	setCurrentText,
+	setTextTitle,
 	setUser,
+	setTextList,
 } from "store/actions";
 import { State } from "store/reducer";
 import "stylesheets/Header.scss";
@@ -15,11 +15,12 @@ import "stylesheets/AnimatedTheme.scss";
 import TextModal from "./TextModal";
 import TimeModal from "./TimeModal";
 import UserModal from "./UserModal";
+import { getTextFromDB } from "helpers/getTextFromDB";
+import { getTextsFromDB } from "helpers/getTextsFromDB";
 
 export interface Options {
 	time: number[];
 	theme: string[];
-	currentText: string[];
 }
 
 interface AnimationProps {
@@ -31,17 +32,6 @@ interface AnimationProps {
 export const options: Options = {
 	time: [5, 15, 30, 45, 60, 120],
 	theme: ["dark", "light"],
-	currentText: [
-		"001_Wörter",
-		"002_fj",
-		"003_urk",
-		"004_dk",
-		"005_Sätze_Englisch",
-		"006_Der_Braunbär",
-		"007_Lachen",
-		"008_Wiederholung_Level_1",
-		"009_test",
-	],
 };
 
 type MyProps = {
@@ -54,22 +44,29 @@ export default function Header() {
 	const [showTextModal, setShowTextModal] = useState(false);
 
 	const {
-		preferences: { timeLimit, theme, currentText, user },
+		preferences: { timeLimit, theme, user, textTitle },
 		time: { timerId },
 	} = useSelector((state: State) => state);
 	const [animationProps, setAnimationProps] =
 		useState<AnimationProps | null>();
 	const dispatch = useDispatch();
 
+	const fillTextList = (textArray) => {
+		let tempCodeTextList: string[] = [];
+		textArray.forEach((element) => {
+			let tempDbText = element.code + "_" + element.titel;
+			tempCodeTextList.push(tempDbText);
+		});
+
+		dispatch(setTextList(tempCodeTextList));
+	};
+
 	useEffect(() => {
 		const theme = localStorage.getItem("theme") || "dark";
-		const currentText = localStorage.getItem("currentText") || "001_Wörter";
 		const user = localStorage.getItem("user") || "";
 		const time = parseInt(localStorage.getItem("time") || "60", 10);
-		import(`wordlists/${currentText}.json`).then((words) =>
-			dispatch(setWordList(words))
-		);
-		dispatch(setCurrentText(currentText));
+
+		dispatch(setTextTitle("..."));
 		dispatch(setUser(user));
 		dispatch(timerSet(time));
 
@@ -88,7 +85,6 @@ export default function Header() {
 				.querySelector(`button[value="${theme}"]`)
 				?.classList.add("selected");
 			document.body.className = theme;
-			//document.body.classList.add(theme);
 			localStorage.setItem("theme", theme);
 		}
 	}, [dispatch, theme]);
@@ -102,15 +98,6 @@ export default function Header() {
 		}
 	}, [dispatch, timeLimit]);
 
-	// Set CurrentText
-	useEffect(() => {
-		if (currentText !== "") {
-			dispatch(setCurrentText(currentText));
-			localStorage.setItem("currentText", currentText);
-			resetTest();
-		}
-	}, [dispatch, currentText]);
-
 	// Set user
 	useEffect(() => {
 		if (user !== "") {
@@ -119,6 +106,14 @@ export default function Header() {
 			resetTest();
 		}
 	}, [dispatch, user]);
+
+	//load texts from DB once per page load
+	useEffect(() => {
+		getTextsFromDB().then(function (responseData) {
+			fillTextList(responseData);
+			getTextFromDB(responseData[0].code);
+		});
+	}, []);
 
 	const openTextModal = () => {
 		setShowTextModal((s) => true);
@@ -244,10 +239,10 @@ export default function Header() {
 	return (
 		//<header className={timerId ? "hidden" : undefined}>
 		<>
-			<header className="">				
+			<header className="">
 				<a href="." className="logo">
 					<div className="icon color-print">
-					<RichitypeIcon />
+						<RichitypeIcon />
 					</div>
 					<div className="text color-print">richitype</div>
 				</a>
@@ -301,7 +296,7 @@ export default function Header() {
 						<button
 							className="mini color-print"
 							onClick={(e) => openTextModal()}>
-							{currentText}
+							{textTitle}
 						</button>
 					</div>
 				</div>

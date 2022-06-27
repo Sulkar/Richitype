@@ -1,87 +1,51 @@
 //console
 import { KeyboardEvent, useEffect, useState, useRef } from "react";
 import styles from "stylesheets/CommandPallet.module.scss";
-import { options, Options } from "./Header";
-import { useDispatch } from "react-redux";
-import { setTime, setTheme, setCurrentText } from "store/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { State } from "store/reducer";
+import { getTextFromDB } from "helpers/getTextFromDB";
 
 interface Props {
 	setShowTextModal: Function;
 }
 
 export default function TextModal(props: Props) {
+	const {
+		preferences: { textList },
+	} = useSelector((state: State) => state);
 	const [palletText, setPalletText] = useState("");
-	const [selectedOption, setSelectedOption] = useState("");
+
 	const [highlightedOption, setHighlightedOption] = useState(0);
 	const [commandList, setCommandList] = useState<string[]>([]);
 	const dispatch = useDispatch();
-	const palletTextBox = useRef<HTMLInputElement>(null);
+	const palletTextBox = useRef<HTMLInputElement>(null);	
 
 	useEffect(() => {
-		setSelectedOption("currentText");
-		if (!selectedOption) {
-			setCommandList(
-				Object.keys(options).filter((option) =>
-					option.includes(palletText.toLowerCase())
-				)
-			);
-		} else {
-			const commands: Array<string> = options[
-				selectedOption as keyof Options
-			].map((o) => o.toString());
-			setCommandList(
-				commands.filter((option: string) =>
-					option.includes(palletText.toLowerCase())
-				)
-			);
-		}
+		const filteredTexts = textList.filter((text: string) =>
+			text.toLowerCase().includes(palletText.toLowerCase())
+		);
+		setCommandList(filteredTexts);
 		setHighlightedOption(0);
-	}, [palletText, selectedOption]);
-
-	const handleCommandSelection = (command: string) => {
-		setPalletText("");
-		if (!command) return;
-		if (!selectedOption) {
-			setSelectedOption(command);
-			return;
-		}
-		switch (selectedOption) {
-			case "time":
-				dispatch(setTime(+command));
-				props.setShowTextModal(false);
-				break;
-			case "theme":
-				dispatch(setTheme(command));
-				props.setShowTextModal(false);
-				break;
-			case "currentText":
-				dispatch(setCurrentText(command));
-				props.setShowTextModal(false);
-				break;
-			default:
-				//console.log(selectedOption, command);
-		}
-	};
+	}, [palletText]);
 
 	const handlePalletKeys = (e: KeyboardEvent) => {
-		if (e.key === "ArrowUp") {
-			setHighlightedOption((op) => (op > 0 ? op - 1 : op));
-		} else if (e.key === "ArrowDown") {
-			setHighlightedOption((op) =>
-				op < commandList.length - 1 ? op + 1 : op
-			);
-		} else if (e.key === "Enter") {
-			const command = commandList[highlightedOption];
-			handleCommandSelection(command);
+		if (e.key === "Enter") {
+			const text = commandList[highlightedOption];
+			setPalletText("");
+			let databaseTextCode = text.match(/^(\d+)_/);
+			if (databaseTextCode != null) {
+				getTextFromDB(databaseTextCode[1]);
+			}
+			props.setShowTextModal(false);
 		} else if (e.key === "Escape") {
 			props.setShowTextModal(false);
 		}
 		e.stopPropagation();
 	};
 
-	const changeHighlight = (index:number) => {
+	const changeHighlight = (index: number) => {
 		setHighlightedOption(index);
-	}
+	};
 
 	return (
 		<div
@@ -91,32 +55,58 @@ export default function TextModal(props: Props) {
 				props.setShowTextModal(false);
 			}}>
 			<div className={styles.commandPallet} onKeyDown={handlePalletKeys}>
-				<input
-					ref={palletTextBox}
-					type="text"
-					className={styles.commandInput}
-					placeholder="Text wählen..."
-					value={palletText}
-					autoFocus
-					onChange={(e) => setPalletText(e.target.value)}
+				<div
+					style={{ backgroundColor: "inherit" }}
 					onClick={(e) => {
 						e.stopPropagation();
-					}}
-				/>
+					}}>
+					<input
+						ref={palletTextBox}
+						type="text"
+						className={styles.commandInput}
+						placeholder="Text wählen..."
+						value={palletText}
+						autoFocus
+						onChange={(e) => setPalletText(e.target.value)}
+					/>
+					<span
+						style={{
+							marginLeft: "75px",
+							cursor: "pointer",
+							paddingLeft: "5px",
+							paddingRight: "5px",
+							fontWeight: "bolder",
+						}}
+						onClick={(e) => {
+							const text = commandList[highlightedOption];
+							setPalletText("");
+							let databaseTextCode = text.match(/^(\d+)_/);
+							if (databaseTextCode != null) {
+								getTextFromDB(databaseTextCode[1]);
+							}
+
+							props.setShowTextModal(false);
+						}}>
+						LOS
+					</span>
+				</div>
 
 				<div className="textModalDiv">
-					{commandList!.map((option, idx) => (
+					{commandList.map((text, idx) => (
 						<div
 							className={`${styles.command} ${
 								highlightedOption === idx && styles.highlighted
 							}`}
 							key={idx}
 							onClick={(e) => {
-								handleCommandSelection(option);
+								let databaseTextCode = text.match(/^(\d+)_/);
+								if (databaseTextCode != null) {
+									getTextFromDB(databaseTextCode[1]);
+									props.setShowTextModal(false);
+								}
 							}}
-							onMouseOver={(e) => changeHighlight(idx)}
-							>
-							{option}
+							onMouseOver={(e) => changeHighlight(idx)}>
+							{text}
 						</div>
 					))}
 				</div>

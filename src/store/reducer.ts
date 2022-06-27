@@ -16,6 +16,8 @@ import {
 	SET_CURRENT_TEXT,
 	SET_LAST_WORD,
 	SET_USER,
+	SET_TEXT_LIST,
+	SET_TEXT_TITLE,
 } from "./actions";
 
 export interface State {
@@ -23,9 +25,11 @@ export interface State {
 		theme: string;
 		timeLimit: number;
 		type: string;
-		currentText: string;
+		currentText: string[];
 		lastWord: boolean;
 		user: string;
+		textList: string[];
+		textTitle: string;
 	};
 	word: {
 		currWord: string;
@@ -46,9 +50,11 @@ export const initialState: State = {
 		theme: "",
 		timeLimit: 0,
 		type: "",
-		currentText: "",
+		currentText: ["loading..."],
 		lastWord: false,
 		user: "",
+		textList: [],
+		textTitle: "",
 	},
 	word: {
 		currWord: "",
@@ -161,6 +167,12 @@ const preferenceReducer = (
 				...state,
 				currentText: payload,
 			};
+
+		case SET_TEXT_TITLE:
+			return {
+				...state,
+				textTitle: payload,
+			};
 		case SET_LAST_WORD:
 			return {
 				...state,
@@ -170,6 +182,11 @@ const preferenceReducer = (
 			return {
 				...state,
 				user: payload,
+			};
+		case SET_TEXT_LIST:
+			return {
+				...state,
+				textList: payload,
 			};
 		default:
 			return state;

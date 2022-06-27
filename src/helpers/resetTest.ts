@@ -16,9 +16,8 @@ export const resetTest = async () => {
 		clearInterval(timerId);
 		dispatch(setTimerId(null));
 	}
-	import(`wordlists/${currentText}.json`).then((words) =>
-		dispatch(setWordList(words.default))
-	);
+
+	dispatch(setWordList(currentText));
 	dispatch(timerSet(timeLimit));
 	dispatch(setLastWord(false));
 	
