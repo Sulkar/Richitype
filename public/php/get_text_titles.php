@@ -5,7 +5,7 @@ header("Access-Control-Allow-Headers: *");
 require_once "./config.php";
 
 try{
-	$sql = "SELECT code, titel FROM texte";
+	$sql = "SELECT code, titel FROM texte ORDER BY code";
 	
 	$stmt = $pdo->prepare($sql); 
 	
